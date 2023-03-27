@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todolist</title>
+    <style>
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="body" class="container">
+        <h1>Todolist</h1>
+
+        <div v-if="!isEditing">
+            <input type="text" v-model="todo" />
+            <input type="submit" value="add" @click="handleClickAdd" />
+        </div>
+
+        <div v-else>
+            <input type="text" v-model="todo" />
+            <input type="submit" value="update" @click="handleOnUpdate" />
+        </div>
+
+        <ol>
+            <li v-for="(todo, index) in todos">
+                {{todo}}
+                <button @click="handleOnEdit(index)">EDIT</button>
+                <button @click="handleRemoveFromList(index)">DELETE</button>
+            </li>
+        </ol>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script>
+        new Vue({
+            el: "#body",
+            data: {
+                isEditing: false,
+                todos: [],
+                todo: "",
+                selectedTodo: null
+            },
+            methods: {
+                handleClickAdd() {
+                    this.todos.push(this.todo);
+                    this.todo = ''
+                },
+                handleRemoveFromList(index) {
+                    this.todos.splice(index, 1)
+                },
+                handleOnEdit(index) {
+                    this.todo = this.todos[index];
+                    this.selectedTodo = index;
+                    this.isEditing = true;
+                },
+                handleOnUpdate() {
+                    this.todos[this.selectedTodo] = this.todo;
+                    this.selectedTodo = null;
+                    this.isEditing = false;
+                    this.todo = "";
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
